@@ -10,7 +10,7 @@ namespace TDDTrainingGround
     {
         public int ParseAndSum(string numbers)
         {
-            
+            return 0;
         }
 
     }
