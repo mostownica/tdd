@@ -26,5 +26,15 @@ namespace TDDTrainingGround.Tests
             StringAssert.Contains("argument needs to be provided", ex.Message);
         }
 
+        [Test]
+        public void ParseAndSum_OneNumber_ReturnsThatNumber()
+        {
+            var parser = MakeParser();
+            var result = parser.ParseAndSum("1");
+
+            Assert.AreEqual(1, result);
+        }
+
+
     }
 }
