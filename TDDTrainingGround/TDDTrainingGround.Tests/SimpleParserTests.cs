@@ -15,12 +15,13 @@ namespace TDDTrainingGround.Tests
             return new SimpleParser();
         }
 
-        [Test]
-        public void ParseAndSum_EmptyParameter_Throws()
+        [TestCase(null)]
+        [TestCase("")]
+        public void ParseAndSum_EmptyParameter_Throws(string input)
         {
             var parser = MakeParser();
 
-            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum(null));
+            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum(input));
 
             StringAssert.Contains("argument needs to be provided", ex.Message);
         }
