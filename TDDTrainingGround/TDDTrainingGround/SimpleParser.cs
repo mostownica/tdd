@@ -10,7 +10,7 @@ namespace TDDTrainingGround
     {
         public int ParseAndSum(string numbers)
         {
-            if (numbers==null)
+            if (string.IsNullOrEmpty(numbers))
             {
                 throw new ArgumentNullException("argument needs to be provided");
             }
