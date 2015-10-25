@@ -10,7 +10,11 @@ namespace TDDTrainingGround
     {
         public int ParseAndSum(string numbers)
         {
-            return 0;
+            if (numbers==null)
+            {
+                throw new ArgumentNullException("argument needs to be provided");
+            }
+            return 0;            
         }
 
     }
