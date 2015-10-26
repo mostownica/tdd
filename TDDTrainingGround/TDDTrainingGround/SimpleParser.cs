@@ -14,7 +14,8 @@ namespace TDDTrainingGround
             {
                 throw new ArgumentNullException("argument needs to be provided");
             }
-            return 0;            
+            int result = Int32.Parse(numbers);
+            return result;            
         }
 
     }
