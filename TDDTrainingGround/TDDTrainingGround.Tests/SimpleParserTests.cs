@@ -27,6 +27,33 @@ namespace TDDTrainingGround.Tests
         }
 
         [Test]
+        public void ParseAndSum_NotANumber_Throws()
+        {
+            var parser = MakeParser();
+            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum("NAN"));
+
+            StringAssert.Contains("argument needs to be a number", ex.Message);
+        }
+
+        [Test]
+        public void ParseAndSum_FloatNumber_Throws()
+        {
+            var parser = MakeParser();
+            var ex = Assert.Catch<InvalidOperationException>(() => parser.ParseAndSum("3.2"));
+
+            StringAssert.Contains("argument needs to be an int32", ex.Message);
+        }
+
+        [Test]
+        public void ParseAndSum_BigNumber_Throws()
+        {
+            var parser = MakeParser();
+            var ex = Assert.Catch<InvalidOperationException>(() => parser.ParseAndSum("3000000000"));
+
+            StringAssert.Contains("argument needs to be an int32", ex.Message);
+        }
+
+        [Test]
         public void ParseAndSum_OneNumber_ReturnsThatNumber()
         {
             var parser = MakeParser();
@@ -36,12 +63,12 @@ namespace TDDTrainingGround.Tests
         }
 
         [Test]
-        public void ParseAndSum_NotANumber_Throws()
+        public void ParseAndSum_TwoNumbers_SumsThem()
         {
             var parser = MakeParser();
-            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum("NAN"));
+            var result = parser.ParseAndSum("1,2");
 
-            StringAssert.Contains("argument needs to be a number", ex.Message);
+            Assert.AreEqual(3, result);
         }
 
     }
