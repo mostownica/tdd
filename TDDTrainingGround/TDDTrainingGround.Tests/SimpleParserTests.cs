@@ -35,6 +35,14 @@ namespace TDDTrainingGround.Tests
             Assert.AreEqual(1, result);
         }
 
+        [Test]
+        public void ParseAndSum_NotANumber_Throws()
+        {
+            var parser = MakeParser();
+            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum("NAN"));
+
+            StringAssert.Contains("argument needs to be a number", ex.Message);
+        }
 
     }
 }
