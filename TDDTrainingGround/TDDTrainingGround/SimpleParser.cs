@@ -14,7 +14,14 @@ namespace TDDTrainingGround
             {
                 throw new ArgumentNullException("argument needs to be provided");
             }
-            int result = Int32.Parse(numbers);
+
+            int result;
+            if (!Int32.TryParse(numbers, out result))
+            {
+                throw new ArgumentNullException("argument needs to be a number");
+            }
+
+            //int result = Int32.Parse(numbers);
             return result;            
         }
 
