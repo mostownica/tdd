@@ -15,40 +15,23 @@ namespace TDDTrainingGround.Tests
             return new SimpleParser();
         }
 
-        [TestCase(null)]
-        [TestCase("")]
-        public void ParseAndSum_EmptyParameter_Throws(string input)
+        public void ParseAndSum_EmptyParameter_Throws()
         {
             var parser = MakeParser();
 
-            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum(input));
+            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum(null));
 
             StringAssert.Contains("argument needs to be provided", ex.Message);
         }
 
-        [Test]
-        public void ParseAndSum_NotANumber_Throws()
+        [TestCase("")]
+        [TestCase("NAN")]
+        [TestCase("3.2")]
+        [TestCase("3000000000")]
+        public void ParseAndSum_FloatNumber_Throws(string input)
         {
             var parser = MakeParser();
-            var ex = Assert.Catch<ArgumentNullException>(() => parser.ParseAndSum("NAN"));
-
-            StringAssert.Contains("argument needs to be a number", ex.Message);
-        }
-
-        [Test]
-        public void ParseAndSum_FloatNumber_Throws()
-        {
-            var parser = MakeParser();
-            var ex = Assert.Catch<InvalidOperationException>(() => parser.ParseAndSum("3.2"));
-
-            StringAssert.Contains("argument needs to be an int32", ex.Message);
-        }
-
-        [Test]
-        public void ParseAndSum_BigNumber_Throws()
-        {
-            var parser = MakeParser();
-            var ex = Assert.Catch<InvalidOperationException>(() => parser.ParseAndSum("3000000000"));
+            var ex = Assert.Catch<FormatException>(() => parser.ParseAndSum(input));
 
             StringAssert.Contains("argument needs to be an int32", ex.Message);
         }
