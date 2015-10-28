@@ -28,7 +28,7 @@ namespace TDDTrainingGround.Tests
         [TestCase("NAN")]
         [TestCase("3.2")]
         [TestCase("3000000000")]
-        public void ParseAndSum_FloatNumber_Throws(string input)
+        public void ParseAndSum_InvalidFormat_Throws(string input)
         {
             var parser = MakeParser();
             var ex = Assert.Catch<FormatException>(() => parser.ParseAndSum(input));
