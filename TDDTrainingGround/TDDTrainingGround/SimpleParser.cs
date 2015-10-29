@@ -8,21 +8,48 @@ namespace TDDTrainingGround
 {
     public class SimpleParser
     {
-        public int ParseAndSum(string numbers)
+
+        public int Method(string numbers)
         {
-            if (string.IsNullOrEmpty(numbers))
+            int num;
+            try
+            {
+                num = Int32.Parse(numbers);
+            }
+            catch (ArgumentNullException)
             {
                 throw new ArgumentNullException("argument needs to be provided");
             }
-
-            int result;
-            if (!Int32.TryParse(numbers, out result))
+            catch (FormatException)
             {
-                throw new ArgumentNullException("argument needs to be a number");
+                throw new FormatException("argument needs to be an int32");
+            }
+            catch (OverflowException)
+            {
+                throw new FormatException("argument needs to be an int32");
             }
 
-            //int result = Int32.Parse(numbers);
-            return result;            
+            return num;
+
+        }
+        public int ParseAndSum(string numbers)
+        {           
+            
+            if (!string.IsNullOrEmpty(numbers) && numbers.Contains(","))
+            {
+                int sum = 0;
+                string[] table = numbers.Split(',');
+
+                for (int i = 0; i < table.Length; i++)
+                    {
+                        sum += Method(table[i]);
+                    }
+
+                return sum;
+            }
+
+           return Method(numbers);                          
+         
         }
 
     }

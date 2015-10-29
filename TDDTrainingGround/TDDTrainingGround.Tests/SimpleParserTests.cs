@@ -14,7 +14,7 @@ namespace TDDTrainingGround.Tests
         {
             return new SimpleParser();
         }
-
+        [Test]
         public void ParseAndSum_EmptyParameter_Throws()
         {
             var parser = MakeParser();
