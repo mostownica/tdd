@@ -8,7 +8,6 @@ namespace TDDTrainingGround
 {
     public class SimpleParser
     {
-
         public int Method(string numbers)
         {
             int num;
@@ -28,23 +27,25 @@ namespace TDDTrainingGround
             {
                 throw new FormatException("argument needs to be an int32");
             }
-
             return num;
-
         }
         public int ParseAndSum(string numbers)
-        {           
-            
+        {  
             if (!string.IsNullOrEmpty(numbers) && numbers.Contains(","))
             {
                 int sum = 0;
                 string[] table = numbers.Split(',');
 
                 for (int i = 0; i < table.Length; i++)
+               {
+                    int helper = Method(table[i]);
+                    if (Int32.MaxValue-sum<helper)
                     {
-                        sum += Method(table[i]);
+                        throw new OverflowException("sum cannot be more than Int32.MaxValue");
                     }
-
+                    sum += helper;
+                }
+                              
                 return sum;
             }
 
