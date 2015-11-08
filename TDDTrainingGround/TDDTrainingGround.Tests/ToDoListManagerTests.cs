@@ -38,6 +38,7 @@ namespace TDDTrainingGround.Tests
             StringAssert.Contains("there is already the same todo", ex.Message);
         }
 
+
         [Test]
         public void GetAllThingsToDo_WhenEmpty_ReturnsEmptyList()
         {
@@ -52,6 +53,89 @@ namespace TDDTrainingGround.Tests
         }
 
         [Test]
+        public void GetTodaysToDos_WhenEmpty_ReturnsEmptyList()
+        {
+            //Arrange
+            var manager = MakeToDoListManager();
+
+            //Act
+            var result = manager.GetTodaysToDos();
+
+            //Assert
+            Assert.AreEqual(new List<ToDo>(), result);
+        }
+
+        [Test]
+        public void GetTodaysToDos_WhenThereAreTodaysToDos_ReturnsTodaysToDos()
+        {
+            //Arrange
+            var manager = MakeToDoListManager();
+            manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 14, 30, 0)));
+            manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 20, 30, 0)));
+            manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 2, 20, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 21, 0, 0);
+
+            //Act
+            var result = manager.GetTodaysToDos();
+
+            //Assert
+            var expected = new List<ToDo>
+            {
+                new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 14, 30, 0)),
+                new ToDo("Wash dishes", new DateTime(2010, 1, 1, 20, 30, 0))
+            };
+
+            Assert.NotNull(result);
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void GetTodaysToDos_WhenThereAreNothingForToday_ReturnsTodaysToDos()
+        {
+            //Arrange
+            var manager = MakeToDoListManager();
+            manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 4, 14, 30, 0)));
+            manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 2, 20, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 21, 0, 0);
+
+            //Act
+            var result = manager.GetTodaysToDos();
+
+            //Assert
+            Assert.AreEqual(new List<ToDo>(), result);
+        }
+
+        [Test]
+        public void GetToDosFromDate_WhenListEmpty_ReturnsEmptyList()
+        {
+            //Arrange
+            var manager = MakeToDoListManager();
+
+            //Act
+            var toDoList = manager.GetToDosFromDate(new DateTime(2010, 1, 4, 14, 30, 0));
+
+            //Assert
+            Assert.IsEmpty(toDoList);
+        }
+
+        [Test]
+        public void GetToDosFromDate_WhenNoToDosFromThatDate_ReturnsEmptyList()
+        {
+            //Arrange
+            var manager = MakeToDoListManager();
+            manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 14, 30, 0)));
+            manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 11, 30, 0)));
+
+            //Act
+            var toDoList = manager.GetToDosFromDate(new DateTime(2010, 1, 4, 14, 30, 0));
+
+            //Assert
+            Assert.IsEmpty(toDoList);
+        }
+
+
+        [Test]
         public void GetAllThingsToDo_WhenNotEmpty_ReturnsListOfToDos()
         {
             //Arrange
@@ -62,13 +146,13 @@ namespace TDDTrainingGround.Tests
             //Act
             var result = manager.GetAllThingsToDo();
 
+            //Assert
             var expected = new List<ToDo>
             {
                 new ToDo("Go out with the dog"),
                 new ToDo("Wash dishes")
             };
 
-            //Assert
             Assert.NotNull(result);
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual(expected, result);
@@ -81,9 +165,9 @@ namespace TDDTrainingGround.Tests
             var manager = MakeToDoListManager();
             manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 14, 30, 0)));
             manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 20, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 21, 0, 0);
 
             //Act
-            SystemTime.Now = () => new DateTime(2010, 1, 1, 21, 0, 0);
             var result = manager.GetNextThingToDo();
 
             //Assert
@@ -96,13 +180,13 @@ namespace TDDTrainingGround.Tests
             var manager = MakeToDoListManager();
             manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 14, 30, 0)));
             manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 11, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 10, 0, 0);
 
             //Act
-            SystemTime.Now = () => new DateTime(2010, 1, 1, 10, 0, 0);
             var result = manager.GetNextThingToDo();
-            var expected = new ToDo("Wash dishes", new DateTime(2010, 1, 1, 11, 30, 0));
 
             //Assert
+            var expected = new ToDo("Wash dishes", new DateTime(2010, 1, 1, 11, 30, 0));
             Assert.AreEqual(expected, result);
         }
         [Test]
@@ -113,13 +197,13 @@ namespace TDDTrainingGround.Tests
             manager.Add(new ToDo("Go out with the dog", new DateTime(2010, 1, 1, 8, 30, 0)));
             manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 9, 30, 0)));
             manager.Add(new ToDo("Cook dinner", new DateTime(2010, 1, 1, 11, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 10, 0, 0);
 
             //Act
-            SystemTime.Now = () => new DateTime(2010, 1, 1, 10, 0, 0);
             var result = manager.GetNextThingToDo();
-            var expected = new ToDo("Cook dinner", new DateTime(2010, 1, 1, 11, 30, 0));
 
             //Assert
+            var expected = new ToDo("Cook dinner", new DateTime(2010, 1, 1, 11, 30, 0));
             Assert.AreEqual(expected, result);
         }
 
@@ -132,15 +216,14 @@ namespace TDDTrainingGround.Tests
             manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 9, 30, 0)));
             manager.Add(new ToDo("Cook dinner", new DateTime(2010, 1, 1, 11, 30, 0)));
             manager.Add(new ToDo("Wash dishes", new DateTime(2010, 1, 1, 12, 30, 0)));
+            SystemTime.Now = () => new DateTime(2010, 1, 1, 12, 0, 0);
 
             //Act
-            SystemTime.Now = () => new DateTime(2010, 1, 1, 12, 0, 0);
             var result = manager.GetNextThingToDo();
-            var expected = new ToDo("Wash dishes", new DateTime(2010, 1, 1, 12, 30, 0));
 
             //Assert
+            var expected = new ToDo("Wash dishes", new DateTime(2010, 1, 1, 12, 30, 0));
             Assert.AreEqual(expected, result);
         }
-
     }
 }
